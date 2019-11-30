@@ -11,7 +11,7 @@ include 'db-connect.php';
      $moist = $_GET['moisture'];
      $light = $_GET['light'];
 
-     $sql = "INSERT INTO Log (humid, temp,moist,light, Date, Time) VALUES ('".$humid."', '".$temp."','".$moist."', '".$light."', '".$d."', '".$t."')";
+     $sql = "INSERT INTO log (humid, temp,moist,light, Date, Time) VALUES ('".$humid."', '".$temp."','".$moist."', '".$light."', '".$d."', '".$t."')";
 
    if (mysqli_query($conn,$sql)) {
        echo "OK";
