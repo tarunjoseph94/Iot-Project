@@ -6,7 +6,7 @@
   <?php
   include 'db-connect.php';
   $sql = "SELECT * FROM `log`";
-  $res2=mysqli_query($conn, $sql2);
+  $res2=mysqli_query($conn, $sql);
   ?>
   <table>
     <tr>
@@ -39,7 +39,7 @@
       <tr>
         <td>
           <?php
-          echo $row['Sl_pk'];
+          echo $row['Sl_pK'];
           ?>
         </td>
         <td>
@@ -73,10 +73,9 @@
           ?>
         </td>
       </tr>
-      $batch=$row['batch'];
-    }
+    <?php } ?>
   </table>
-  ?>
+
 
 </body>
 </html>
