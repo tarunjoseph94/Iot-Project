@@ -1,8 +1,8 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname="iot";
+$servername = "remotemysql.com";
+$username = "w7d7KKX28F";
+$password = "WS9rHsSbKI";
+$dbname="w7d7KKX28F";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password,$dbname);
