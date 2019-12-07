@@ -1,5 +1,5 @@
 <?php
-include 'db-connect.php';
+include ('includes/db-connect.php');
   date_default_timezone_set('Asia/Kolkata');
    $d = date("Y-m-d");
    //echo " Date:".$d."<BR>";
