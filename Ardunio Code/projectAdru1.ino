@@ -1,12 +1,12 @@
 #include "DHT.h"
 #include <ArduinoJson.h>
-#define DHTPIN 5
+#define DHTPIN 8
 #define DHTTYPE DHT22 
-const int moistPin=A0;
+const int moistPin = A3;
 const int ldrPin = A0;
-const int fanPin =;
-const int relayLightPin =;
-const int relayPumpPin =;
+const int fanPin =3;
+const int relayLightPin =2;
+const int relayPumpPin =11;
 DHT dht(DHTPIN, DHTTYPE);
 float humid = 0;
 float temp = 0;
@@ -25,7 +25,7 @@ dht.begin();
 void loop() {
    delay(2000);
  readTemp();
- readmoist();
+ readMoist();
  readLight();
  StaticJsonBuffer<1000> jsonBuffer;
  JsonObject& root = jsonBuffer.createObject();
@@ -33,52 +33,80 @@ void loop() {
   root["temp"] = temp;
   root["moisture"] = mositure;
   root["light"] = light;
+  //printResult();
 if(Serial.available()>0)
 {
  root.printTo(Serial);
+
 }
+delay(1000);
 }
-readTemp()
+void printResult()
+{
+   Serial.print("Humidity: "); 
+  Serial.print(humid);
+  Serial.print(" %\t");
+  Serial.print("Temperature: "); 
+  Serial.print(temp);
+  Serial.print(" *C ");
+  Serial.print("\n ");
+   Serial.print("moisture : ");
+  Serial.println(mositure);
+   Serial.print("light : ");
+  Serial.println(light);
+}
+void readTemp()
 {
       humid = dht.readHumidity();
      temp = dht.readTemperature();
      if (isnan(humid) || isnan(temp) ) {
-    Serial.println("Failed to read from DHT sensor!");
+    //Serial.println("Failed to read from DHT sensor!");
     return;
     }
-    if(temp<28)
+    if(temp>28)
     {
-    //turn on fan  
+    analogWrite(fanPin,255); 
     }
     else
     {
-      //turn off fan
+      analogWrite(fanPin,0);
     }
+  //Serial.print("Humidity: "); 
+  //Serial.print(humid);
+  //Serial.print(" %\t");
+  //Serial.print("Temperature: "); 
+  //Serial.print(temp);
+  //Serial.print(" *C ");
+  //Serial.print("\n ");
 }
-readMoist()
+void readMoist()
 {
-long int per=analogRead(moistpin);
- per=map(per,1023,0,0,100) ;
- if(per<55)
+ mositure=analogRead(moistPin);
+ mositure=map(mositure,1023,0,0,100);
+ if(mositure >= 65)
  {
-  //turn on pump
+  digitalWrite(relayPumpPin,HIGH);
   }  
   else
   {
-    //turn off pump
+    digitalWrite(relayPumpPin,LOW);
   }
+  //Serial.print("moisture : ");
+  //Serial.println(mositure);
 } 
-readLight()
+void readLight()
 {
-   int ldrStatus = analogRead(ldrPin);
+   light = analogRead(ldrPin);
 
-if (ldrStatus <= 200) {
+if (light >= 200) {
 
-  digitalWrite(ledPin, HIGH);   // turn the Bulb on (HIGH is the voltage level)
+  digitalWrite(relayLightPin, LOW);   // turn the Bulb on (HIGH is the voltage level)
 }
 else
 {  
-  digitalWrite(ledPin, LOW);    // turn the Bulb off by making the voltage LOW
+  digitalWrite(relayLightPin, HIGH);    // turn the Bulb off by making the voltage LOW
 }
- 
+ //Serial.print("light : ");
+  //Serial.println(light);
+ light=map(light,1020,0,0,100);
 }
